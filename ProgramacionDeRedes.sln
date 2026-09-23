@@ -186,6 +186,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "05_MOM_00_AsyncReqResClient
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "05_MOM_00_AsyncReqResServerNonAwaited", "05_MOM_00_AsyncReqResServerNonAwaited\05_MOM_00_AsyncReqResServerNonAwaited.csproj", "{2F8643C4-164C-4A66-9CEC-DF53B4B6CF3C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "04_Async_02_Ejemplo08_linkedToken", "04_Async_02_Ejemplo08_linkedToken\04_Async_02_Ejemplo08_linkedToken.csproj", "{17658D86-D31C-4EE7-A44C-D3F7AD645117}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -564,5 +566,9 @@ Global
 		{2F8643C4-164C-4A66-9CEC-DF53B4B6CF3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F8643C4-164C-4A66-9CEC-DF53B4B6CF3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F8643C4-164C-4A66-9CEC-DF53B4B6CF3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17658D86-D31C-4EE7-A44C-D3F7AD645117}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17658D86-D31C-4EE7-A44C-D3F7AD645117}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17658D86-D31C-4EE7-A44C-D3F7AD645117}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17658D86-D31C-4EE7-A44C-D3F7AD645117}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
