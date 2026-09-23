@@ -188,6 +188,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "05_MOM_00_AsyncReqResServer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "04_Async_02_Ejemplo08_linkedToken", "04_Async_02_Ejemplo08_linkedToken\04_Async_02_Ejemplo08_linkedToken.csproj", "{17658D86-D31C-4EE7-A44C-D3F7AD645117}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "04_Async_02_Ejemplo09_linkedTokenServer", "04_Async_02_Ejemplo09_linkedTokenServer\04_Async_02_Ejemplo09_linkedTokenServer.csproj", "{098B24EF-263B-4072-AB1B-8F21648F1B55}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "04_Async_02_Ejemplo09_linkedTokenClient", "04_Async_02_Ejemplo09_linkedTokenClient\04_Async_02_Ejemplo09_linkedTokenClient.csproj", "{D858FB57-6DBE-461D-A18D-411B8BF2E371}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -570,5 +574,13 @@ Global
 		{17658D86-D31C-4EE7-A44C-D3F7AD645117}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17658D86-D31C-4EE7-A44C-D3F7AD645117}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17658D86-D31C-4EE7-A44C-D3F7AD645117}.Release|Any CPU.Build.0 = Release|Any CPU
+		{098B24EF-263B-4072-AB1B-8F21648F1B55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{098B24EF-263B-4072-AB1B-8F21648F1B55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{098B24EF-263B-4072-AB1B-8F21648F1B55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{098B24EF-263B-4072-AB1B-8F21648F1B55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D858FB57-6DBE-461D-A18D-411B8BF2E371}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D858FB57-6DBE-461D-A18D-411B8BF2E371}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D858FB57-6DBE-461D-A18D-411B8BF2E371}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D858FB57-6DBE-461D-A18D-411B8BF2E371}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

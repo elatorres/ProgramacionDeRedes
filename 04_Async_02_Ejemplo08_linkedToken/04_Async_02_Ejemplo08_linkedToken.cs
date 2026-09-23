@@ -29,7 +29,6 @@ class AsyncLinkedTokenExample
 
         // Seguimos cuando termina cualquiera de las dos.
         await Task.WhenAny(descarga, lectura);
-
         try
         {
             await descarga;
@@ -43,7 +42,6 @@ class AsyncLinkedTokenExample
                 Console.WriteLine("Cancelado porque escribiste cancelar.");
             else
                 Console.WriteLine("Cancelado por timeout de la descarga.");
-
             Console.WriteLine($"cts cancelado: {cts.IsCancellationRequested}");
             Console.WriteLine($"linkedCts cancelado: {linkedCts.IsCancellationRequested}");
         }
@@ -60,7 +58,7 @@ class AsyncLinkedTokenExample
             Console.WriteLine("Press any key to exit.");
             Console.ReadKey();
         }
-    }
+    } // Fn Main
 
     // Lee líneas de la consola mientras la descarga sigue.
     // Si la línea es exactamente "cancelar", cancela cts.
@@ -70,54 +68,45 @@ class AsyncLinkedTokenExample
         {
             // ReadLine bloquea. Va en otro hilo para no frenar la descarga.
             string? linea = await Task.Run(Console.ReadLine);
-
             // null: se cerró la entrada. IsCompleted: la descarga ya terminó.
             if (linea == null || descarga.IsCompleted)
                 return;
-
             if (linea == "cancelar")
             {
                 Console.WriteLine("Main::Cancel");
                 cts.Cancel();
                 return;
             }
-
             Console.WriteLine("Para cancelar escribí: cancelar");
         }
-    }
+    } // Fin LeerConsola
 
     // Baja el archivo de a un bloque. El token es el de linkedCts,
     // así que corta tanto por "cancelar" como por el timeout de 5 s.
     static async Task DescargarArchivoAsync(CancellationToken token)
     {
         const int bloques = 12;
-
         for (int i = 1; i <= bloques; i++)
         {
             token.ThrowIfCancellationRequested();
-
             int bytes = LeerBloque(i, token);
             Console.WriteLine($"Bloque {i}/{bloques} ({bytes} bytes)");
-
             // Espera entre bloques, como si llegara el próximo por la red.
             await Task.Delay(800, token);
         }
-    }
+    } // Fin DescargaArchivo
 
     // Simula el trabajo de leer un bloque: varias sumas, y entre medio
     // pregunta si hay que cancelar.
     static int LeerBloque(int numero, CancellationToken token)
     {
         int bytes = 0;
-
         for (int paso = 0; paso < 20; paso++)
         {
             token.ThrowIfCancellationRequested();
-
             for (int n = 0; n < 100000; n++)
                 bytes = unchecked(bytes + numero + n);
         }
-
         return Math.Abs(bytes % 4096) + 1;
-    }
+    } // Fin LeerBloque
 }
