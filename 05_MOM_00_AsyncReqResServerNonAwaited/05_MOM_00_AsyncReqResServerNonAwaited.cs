@@ -95,12 +95,14 @@ Console.WriteLine(" [x] Awaiting RPC requests");
 Console.WriteLine(" Press [enter] to exit.");
 Console.ReadLine();
 // ¡CUIDADO!
-// Calcula el número de Fibbonaci recursivamente
+// Calcula el número de Fibbonaci recursivamente. El Orden es O(2^n).
 // Asume solo entrada de enteros positivos válidos.
-// No esperes que esto funcione para números grandes, PUEDE TARDAR MUCHISIMO.
+// No esperes que esto funcione para números grandes.
 // Y es probablemente la implementación recursiva más lenta posible, PUEDE TARDAR MUCHISIMO.
-// Fn=(phi^n-(-phi)^-n)/sqrt(5) donde phi=~1618034...
 // Fib(100)=354.224.848.179.261.915.075
+// O(2^100)=1,2676506×10³⁰
+// Ver también: https://stackoverflow.com/questions/9122277/what-is-a-non-recursive-solution-for-fibonacci-like-sequence-in-java
+// Fn=(phi^n-(-phi)^-n)/sqrt(5) donde phi=(1+√5)÷2=~1,618033989... NO RECURSIVA
 static int Fib(int n)
 {
     if (n is 0 or 1)
