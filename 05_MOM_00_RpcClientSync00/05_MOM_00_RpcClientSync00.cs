@@ -2,33 +2,33 @@
 using RabbitMQ.Client.Events;
 using System.Text;
 using System.Collections.Concurrent;
-
-// Este cliente se conecta sincrónicamente a RabbitMQ, Ver. 5.0.0
+// Las nuevas versiones son solo asincrónicas!!
+// Este cliente se conecta a RabbitMQ, Ver. 7.2.2
 // envía un mensaje a "rpc_queue", y se bloquea hasta que vuelve una respuesta.
 public class RpcClient : IDisposable
 {
     private const string QUEUE_NAME = "rpc_queue";
 
     private readonly IConnection connection;
-    private readonly IModel channel;
+    private readonly IChannel channel;              // antes IModel
     private readonly string replyQueueName;
-    private readonly EventingBasicConsumer consumer;
+    private readonly AsyncEventingBasicConsumer consumer; // antes EventingBasicConsumer
     private readonly BlockingCollection<string> respQueue = new();
     private string? correlationId;
 
     public RpcClient()
     {
-        // Crear una conexión y un canal
+        // Crear una conexión y un canal (ahora asincrónico -> bloqueamos)
         var factory = new ConnectionFactory() { HostName = "localhost" };
-        connection = factory.CreateConnection();
-        channel = connection.CreateModel();
+        connection = factory.CreateConnectionAsync().GetAwaiter().GetResult();
+        channel = connection.CreateChannelAsync().GetAwaiter().GetResult();
 
         // Declara una cola temporal de respuesta
-        replyQueueName = channel.QueueDeclare().QueueName;
+        replyQueueName = channel.QueueDeclareAsync().GetAwaiter().GetResult().QueueName;
 
         // El consumidor que va a recibir la respuesta
-        consumer = new EventingBasicConsumer(channel);
-        consumer.Received += (model, ea) =>
+        consumer = new AsyncEventingBasicConsumer(channel);
+        consumer.ReceivedAsync += async (model, ea) =>
         {
             // verificar el correlation ID
             if (ea.BasicProperties.CorrelationId == correlationId)
@@ -37,13 +37,14 @@ public class RpcClient : IDisposable
                 var response = Encoding.UTF8.GetString(body);
                 respQueue.Add(response);
             }
+            await Task.CompletedTask;
         };
 
         // comenzar a consumir de la cola de resultados
-        channel.BasicConsume(
+        channel.BasicConsumeAsync(
             consumer: consumer,
             queue: replyQueueName,
-            autoAck: true);
+            autoAck: true).GetAwaiter().GetResult();
     }
 
     // Mandar un mensaje
@@ -51,18 +52,22 @@ public class RpcClient : IDisposable
     {
         correlationId = Guid.NewGuid().ToString();
 
-        var props = channel.CreateBasicProperties();
-        props.CorrelationId = correlationId;
-        props.ReplyTo = replyQueueName; // devolver ene sta cola
+        // Ahora BasicProperties se instancia directamente
+        var props = new BasicProperties
+        {
+            CorrelationId = correlationId,
+            ReplyTo = replyQueueName // devolver en esta cola
+        };
 
         var messageBytes = Encoding.UTF8.GetBytes(message);
 
-        // Publicar la solicitud a la cola de  RPC
-        channel.BasicPublish(
+        // Publicar la solicitud a la cola de RPC
+        channel.BasicPublishAsync(
             exchange: "",
             routingKey: QUEUE_NAME,
+            mandatory: false,
             basicProperties: props,
-            body: messageBytes);
+            body: messageBytes).GetAwaiter().GetResult();
 
         // Bloquearse esperando hasta que la respuesta con el correlationId correcto llegue
         var response = respQueue.Take();
@@ -72,8 +77,8 @@ public class RpcClient : IDisposable
     // liberamos los recursos
     public void Dispose()
     {
-        channel?.Close();
-        connection?.Close();
+        channel?.CloseAsync().GetAwaiter().GetResult();
+        connection?.CloseAsync().GetAwaiter().GetResult();
     }
 }
 
@@ -89,14 +94,14 @@ public static class Rpc
         while (true)
         {
             // leo un mensaje de la consola
-            string mensaje = Console.ReadLine();
+            string? mensaje = Console.ReadLine();
             // si es exit salgo.
             if (mensaje == "exit")
                 break;
             // si es vacío mando Hello World!
             if (mensaje == "")
-                mensaje="Hello World!";
-            
+                mensaje = "Hello World!";
+
             Console.WriteLine($" [>] Sending: {mensaje}");
             var response = rpcClient.Call(mensaje);
             Console.WriteLine($" [<] Received: {response}");
