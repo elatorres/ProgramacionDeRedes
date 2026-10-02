@@ -4,20 +4,16 @@ using System.Collections.Concurrent;
 using System.Text;
 
 // RPC
-// OPCIONALMENTE EJECUTARLO CON PARÁMETROS POR LÍNEA DE COMANDO
-// PIDE EL FIBONACCI
-// cd /home/enrique/RiderProjects/ProgramacionDeRedes/05_MOM_00_AsyncReqResClient/bin/Debug/net8.0/
-// ./05_MOM_00_AsyncReqResClient 10
 // 
-// El método IAsyncDisposable.DisposeAsync() de la interfaz System.IAsyncDisposable
-// se implementa cuando se necesita realizar un Dispose asincrónico. DisposeAsync()
-// devuelve un ValueTask que representa la operación de eliminación asíncrona.
-// https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-disposeasync
+// La clase RpcClient implementa un canal bidireccional con el servidor donde se le pide una
+// operación y se espera el retorno del resultado. Maneja las múltiples solicitudes y es
+// reentrante. Esto es que puede tener nuevas solicitudes aunque no haya terminado de procesar
+// la anteriores. Con el mensaje se envía un id para identificar la solicitud y también la cola
+// privada de respuesta para el cliente.
+// Cada cliente puede hacer múltiples solicitudes asincrónicas y múltiples clientes se asocian
+// a diferentes colas de respuesta, po lo que el servidor puede atender a múltiples clientes
+// en la misma máquina y/o en máquinas diferentes.
 
-// La clase RpcClient implementa un canal bidireccional con el servidor donde se le pide una operación
-// y se espera el retorno del resultado. Maneja las múltiples solicitudes y es reentrante. Esto es que
-// puede tener nuevas solicitudes aunque no haya terminado de procesar la anteriores. Con el mensaje
-// se envía un id para identificar la solicitud y también la cola privada de respuesta para el cliente. 
 public class RpcClient : IAsyncDisposable
 {
     // Este es el nombre de la cola que vamos a usar para enviar mensajes al servidor.
