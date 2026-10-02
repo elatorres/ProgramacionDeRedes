@@ -3,6 +3,7 @@ using RabbitMQ.Client.Events;
 using System.Text;
 
 // Implementa un RPC Remote Procedure Call con RabbitMQ
+// ¡¡Pueden haber varios servidores al mismo tiempo!!
 const string QUEUE_NAME = "rpc_queue";
 // Creo el connection factory y especifico el EndPoint y el usuario (puerto por defecto)
 var factory = new ConnectionFactory { HostName = "localhost" ,
@@ -16,7 +17,7 @@ using var channel = await connection.CreateChannelAsync();
 await channel.QueueDeclareAsync(
     queue: QUEUE_NAME, 
     durable: true, // <<== 
-    exclusive: true, // <<==
+    exclusive: false, // <<==
     autoDelete: false, 
     arguments: null);
 
@@ -95,7 +96,7 @@ Console.WriteLine(" [x] Awaiting RPC requests");
 Console.WriteLine(" Press [enter] to exit.");
 Console.ReadLine();
 // ¡CUIDADO!
-// Calcula el número de Fibbonaci recursivamente. El Orden es O(2^n).
+// Calcula el número de Fibonacci recursivamente. El Orden es O(2^n).
 // Asume solo entrada de enteros positivos válidos.
 // No esperes que esto funcione para números grandes.
 // Y es probablemente la implementación recursiva más lenta posible, PUEDE TARDAR MUCHISIMO.
