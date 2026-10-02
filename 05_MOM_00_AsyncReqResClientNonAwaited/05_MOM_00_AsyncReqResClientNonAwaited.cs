@@ -163,29 +163,44 @@ public class Rpc
     {
         // hay que invocarla por línea de comando y pasarle un número n
         Console.WriteLine("RPC Client");
-        // si no tiene parámetros ingresa un 30
-        string n = args.Length > 0 ? args[0] : "30";
+        // Generamos cuatro números aleatorios
+        Random r = new Random();
+        int kInt = r.Next(3, 30);
+        int lInt = r.Next(3, 30);
+        int mInt = r.Next(3, 30);
+        int nInt = r.Next(3, 30);
+        
+        
+        string k = kInt.ToString();
+        string l = lInt.ToString();
+        string m = mInt.ToString();
+        string n = nInt.ToString();
         // Le pedimos al servidor que nos resuelva n
-        await InvokeAsync(n);
+        await InvokeAsync(k,l,m,n);
 
         Console.WriteLine(" Press [enter] to exit.");
         Console.ReadLine();
     }
     
-    private static async Task InvokeAsync(string n)
+    private static async Task InvokeAsync(string k, string l, string m, string n)
     {
         // 0. creamos un cliente RPC
         var rpcClient = new RpcClient();
         await rpcClient.StartAsync();
 
         // 1. Comenzamos el primer cálculo (sin await aún!) y nos devuelve una promesa
-        Console.WriteLine($" [x] Requesting fib({n})...");
-        Task<string> fibTask1 = rpcClient.CallAsync(n);
+        Console.WriteLine($" [x] Requesting fib({k})...");
+        Task<string> fibTask1 = rpcClient.CallAsync(k);
 
-        // 2. Comenzamos la segunda operación inmediatamente y tampoco hacemos await ni
-        // verificamos el resultado
-        Console.WriteLine(" [x] Requesting fib(10) simultaneously...");
-        Task<string> fibTask2 = rpcClient.CallAsync("10");
+        Console.WriteLine($" [x] Requesting fib({l})...");
+        Task<string> fibTask2 = rpcClient.CallAsync(l);
+        
+        Console.WriteLine($" [x] Requesting fib({m})...");
+        Task<string> fibTask3 = rpcClient.CallAsync(m);
+
+        Console.WriteLine($" [x] Requesting fib({n})...");
+        Task<string> fibTask4 = rpcClient.CallAsync(n);
+        
         // Las dos operaciones se están ejecutando al mismo tiempo en el servidor.
 
         // 3. Hacemos otras cosas mientras esperamos que el servidor responda
@@ -198,11 +213,15 @@ public class Rpc
         // 4. Ahora cuando realmente necesitamos los resultados entonces hacemos el await de las promesas
         Console.WriteLine(" [!] Client now needs the results. Waiting...");
         // Si ya están los resultados en realidad no espera nada
-        string result1 = await fibTask1;
-        string result2 = await fibTask2;
         // y los imprimo
-        Console.WriteLine($" [.] Got result for fib({n}): {result1}");
-        Console.WriteLine($" [.] Got result for fib(10): {result2}");
+        string result1 = await fibTask1;
+        Console.WriteLine($" [.] Got result for fib({k}): {result1}");
+        string result2 = await fibTask2;
+        Console.WriteLine($" [.] Got result for fib({l}): {result2}");
+        string result3 = await fibTask3;
+        Console.WriteLine($" [.] Got result for fib({m}): {result3}");
+        string result4 = await fibTask4;
+        Console.WriteLine($" [.] Got result for fib({n}): {result4}");
         // El dispose es automático
     }
 }
