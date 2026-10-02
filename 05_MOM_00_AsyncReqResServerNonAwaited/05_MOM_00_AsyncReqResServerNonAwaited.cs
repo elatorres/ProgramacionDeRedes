@@ -13,10 +13,14 @@ using var connection = await factory.CreateConnectionAsync();
 // creo el canal de comunicación dentro de la conexión anterior
 using var channel = await connection.CreateChannelAsync();  
 // Creo una cola QUEUE_NAME = "rpc_queue" si no existe previamente
-await channel.QueueDeclareAsync(queue: QUEUE_NAME, durable: false, exclusive: false,
-    autoDelete: false, arguments: null);
+await channel.QueueDeclareAsync(
+    queue: QUEUE_NAME, 
+    durable: true, // <<== 
+    exclusive: true, // <<==
+    autoDelete: false, 
+    arguments: null);
 
-// Declaro la calidad de servicio de la cola. BasicQosAsync garantiza que sólo se envíe un mensaje
+// Declaro la calidad de servicio de la cola. BasicQosAsync garantiza que solo se envíe un mensaje
 // sin acknowledge a un worker a la vez. Útil para el envío justo en RPC. También permite distribuir
 // el trabajo si hay varios servidores. Poner prefetch a 10 hace que como máximo un servidor puede
 // procesar hasta 10 mensajes a la vez
@@ -55,7 +59,7 @@ consumer.ReceivedAsync += async (object sender, BasicDeliverEventArgs ea) =>
             // Este es el trabajo pesado
             response = Fib(n).ToString();
             // que tarde un poquito más (mi máquina es muy rápida) quitar si tarda mucho.
-            await Task.Delay(500);
+            await Task.Delay(2000);
             // mostramos el resultado cuando terminó
             Console.WriteLine($" [.] Result Fib({message})={response} on Thread {Environment.CurrentManagedThreadId}");
         }
@@ -78,7 +82,7 @@ consumer.ReceivedAsync += async (object sender, BasicDeliverEventArgs ea) =>
             // Avisamos que enviamos la respuesta
             Console.WriteLine($" [v] Done Fib for ID: {props.CorrelationId}");
         }
-    }); // Fin de l método delegado que procesa los mensajes
+    }); // Fin del método delegado que procesa los mensajes
     // Return immediately to let RabbitMQ give us the next message
     await Task.CompletedTask;
 }; // fin del consumidor de RPC
@@ -103,6 +107,5 @@ static int Fib(int n)
     {
         return n;
     }
-
     return Fib(n - 1) + Fib(n - 2);
 }

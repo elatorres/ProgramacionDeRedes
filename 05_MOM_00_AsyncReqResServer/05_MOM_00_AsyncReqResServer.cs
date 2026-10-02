@@ -3,7 +3,7 @@ using RabbitMQ.Client.Events;
 using System.Text;
 
 // Implementa un RPC Remote Procedure Call con RabbitMQ
-const string QUEUE_NAME = "rpc_queue";
+const string queueName = "rpc_queue";
 // Creo el connection factory y especifico el EndPoint y el usuario (puerto por defecto)
 var factory = new ConnectionFactory { HostName = "localhost" ,
     UserName = "guest",
@@ -13,11 +13,17 @@ using var connection = await factory.CreateConnectionAsync();
 // creo el canal de comunicación dentro de la conexión anterior
 using var channel = await connection.CreateChannelAsync();  
 // Creo una cola QUEUE_NAME = "rpc_queue" si no existe previamente
-await channel.QueueDeclareAsync(queue: QUEUE_NAME, durable: false, exclusive: false,
-    autoDelete: false, arguments: null);
+// await channel.QueueDeclareAsync(queue: queueName, durable: false, exclusive: false,
+// autoDelete: false, arguments: null);
+await channel.QueueDeclareAsync(
+    queue: queueName, 
+    durable: true,  // This type of queue cannot be temporary
+    exclusive: true, // exclusive for temporary RPC
+    autoDelete: false, 
+    arguments: null);
 
 // Declaro la calidad de servicio de la cola
-// BasicQosAsync garantiza que sólo se envíe un mensaje sin acknowledge a un worker a la vez
+// BasicQosAsync garantiza que solo se envíe un mensaje sin acknowledge a un worker a la vez
 // Útil para el envío justo en RPC. También permite distribuir el trabajo si hay varios servidores.
 await channel.BasicQosAsync(prefetchSize: 0, prefetchCount: 1, global: false);
 
@@ -52,9 +58,10 @@ consumer.ReceivedAsync += async (object sender, BasicDeliverEventArgs ea) =>
         var message = Encoding.UTF8.GetString(body);
         int n = int.Parse(message);
         
-        // Calcula el número de Fibbonaci recursivamente y lo guardamos
+        // Calcula el número de Fibonacci recursivamente y lo guardamos
         // como string en la respuesta
         Console.WriteLine($" [.] Fib({message})");
+        await Task.Delay(2000); // Simulate work  <<<======
         response = Fib(n).ToString();
         Console.WriteLine($" [.] Fib({message})={response}");
     }
@@ -81,14 +88,14 @@ consumer.ReceivedAsync += async (object sender, BasicDeliverEventArgs ea) =>
 };  // fin del consumidor de RPC
 
 // Comienza a consumir mensajes 
-await channel.BasicConsumeAsync(QUEUE_NAME, false, consumer);
+await channel.BasicConsumeAsync(queueName, false, consumer);
 
 // Y espera por la terminación...
 Console.WriteLine(" [x] Awaiting RPC requests");
 Console.WriteLine(" Press [enter] to exit.");
 Console.ReadLine();
 // ¡CUIDADO!
-// Calcula el número de Fibbonaci recursivamente
+// Calcula el número de Fibonacci recursivamente
 // Asume solo entrada de enteros positivos válidos.
 // No esperes que esto funcione para números grandes, PUEDE TARDAR MUCHISIMO.
 // Y es probablemente la implementación recursiva más lenta posible, PUEDE TARDAR MUCHISIMO.
@@ -100,6 +107,5 @@ static int Fib(int n)
     {
         return n;
     }
-
     return Fib(n - 1) + Fib(n - 2);
 }

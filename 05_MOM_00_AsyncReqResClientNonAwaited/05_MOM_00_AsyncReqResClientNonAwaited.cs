@@ -54,7 +54,7 @@ public class RpcClient : IAsyncDisposable
         // declara una cola temporal de respuesta/retorno/resultado
         // con un nombre autogenerado del estilo "amq.gen-ABC123..."
         QueueDeclareOk queueDeclareResult = await _channel.QueueDeclareAsync();
-        // extrae el nombre autogenerado de la cola
+        // extrae el nombre autogenerado de la cola, para que lo puedan mandar paar el callback
         _replyQueueName = queueDeclareResult.QueueName;
 
         // Configura un consumidor asincrónico que escucha a la cola de respuestas
@@ -83,13 +83,14 @@ public class RpcClient : IAsyncDisposable
             }
             return Task.CompletedTask; // Terminé correctamente y asincrónicamente
         }; // Fin del método delegado
+        
         // El consumidor comienza a consumir mensajes de la cola...
         await _channel.BasicConsumeAsync(_replyQueueName, true, consumer);
     }  // Fin StartAsync
 
     // Este es el que envía el mensaje y también recibe un cancellation token (cancelación no
     // implementada), y devuelve una promesa de resultado string.  Es la función local que hace
-    // el cálculo, retorna una promesa, manda el cálculo a hacerse en el servidor, recbe el
+    // el cálculo, retorna una promesa, manda el cálculo a hacerse en el servidor, recibe el
     // resultado y lo asigna a la promesa. Recordar que puedo tener varias tareas que invocan
     // CallAsync con diferentes parámetros en forma asincrónica, incluso que vuelven a invocar
     // aún cuando todavía no recibieron el resultado de la anterior solicitud
@@ -105,14 +106,15 @@ public class RpcClient : IAsyncDisposable
         var props = new BasicProperties
         {
             CorrelationId = correlationId,
-            ReplyTo = _replyQueueName
+            ReplyTo = _replyQueueName  // <<==
         };
         // Creamos la "Promesa"
         var tcs = new TaskCompletionSource<string>(TaskCreationOptions.RunContinuationsAsynchronously);
         // y la agregamos al diccionario
         _callbackMapper.TryAdd(correlationId, tcs);
         // Registramos el cancellation token, si se cancela la tarea hay que eliminarla del diccionario
-        // y poner la promesa como cancelada
+        // y poner la promesa como cancelada.
+        // Habría que avisarle al servidor que cancele la tarea, pero esa ya es otra historia...
         cancellationToken.Register(() =>
         {
             _callbackMapper.TryRemove(correlationId, out _);
@@ -122,12 +124,13 @@ public class RpcClient : IAsyncDisposable
         // Manda y olvida la publicación. 
         var messageBytes = Encoding.UTF8.GetBytes(message);
         _ = _channel.BasicPublishAsync(
-            exchange: string.Empty, 
-            routingKey: QUEUE_NAME,
+            exchange: string.Empty, // Exchange por defecto ""
+            routingKey: QUEUE_NAME,  // Cola del servidor
             mandatory: true, 
             basicProperties: props, 
             body: messageBytes);
 
+        // ===============================================
         // Devuelve la Task (la "Promesa") inmediatamente sin un await
         return tcs.Task;
     }

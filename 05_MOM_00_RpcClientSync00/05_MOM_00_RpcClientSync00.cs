@@ -23,7 +23,7 @@ public class RpcClient : IDisposable
         connection = factory.CreateConnection();
         channel = connection.CreateModel();
 
-        // Declarara uns cola temporal de respuesta
+        // Declara una cola temporal de respuesta
         replyQueueName = channel.QueueDeclare().QueueName;
 
         // El consumidor que va a recibir la respuesta
@@ -77,7 +77,7 @@ public class RpcClient : IDisposable
     }
 }
 
-public class Rpc
+public static class Rpc
 {
     // mi aplicación
     public static void Main(string[] args)
