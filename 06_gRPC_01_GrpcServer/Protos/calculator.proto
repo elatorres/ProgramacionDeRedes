@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcMultiplication";
+
+package calculator;
+
+// Definición del servicio de multiplicación
+service Calculator {
+  // un procedimiento RPC para multiplicar dos números
+  rpc Multiply (MultiplyRequest) returns (MultiplyReply);
+}
+
+// El mensaje de solicitud con dos números
+message MultiplyRequest {
+  double number1 = 1;
+  double number2 = 2;
+}
+
+// La respuesta con un número
+message MultiplyReply {
+  double result = 1;
+}

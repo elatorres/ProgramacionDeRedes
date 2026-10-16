@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcAuthExample";
+
+service AuthService {
+  rpc Authenticate (AuthRequest) returns (AuthResponse);
+  rpc GetData (DataRequest) returns (DataResponse);
+  rpc GetFilteredData (FilteredDataRequest) returns (FilteredDataResponse);
+}
+
+message AuthRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message AuthResponse {
+  string token = 1;
+  string message = 2;
+}
+
+message DataRequest {
+  string token = 1;
+}
+
+message DataResponse {
+  string data = 1;
+}
+
+message FilteredDataRequest {
+  string token = 1;
+  string filterString = 2;
+  int32 filterNumber = 3;
+}
+
+message FilteredDataResponse {
+  string result = 1;
+}

@@ -1,0 +1,55 @@
+syntax = "proto3";  // describe la versión de sintaxis usada en este documento
+
+// Cuando genere el protocolo de comunicación lo genera en este namespace de C#
+option csharp_namespace = "Server_gRPC"; 
+// El nombre del paquete (para uso interno de gRPC) es greet
+package greet;
+
+// Definición del Servicio Greeter
+service Greeter {
+  // Si se invoca SayHello con el mensaje tipo HelloRequest
+  // respondemos con un mensaje tipo HelloReply
+  rpc SayHello (HelloRequest) returns (HelloReply);
+  // Si se invoca Sum con un parámetro tipo NumRequest 
+  // se devuelve un resultado tipo NumReply
+  rpc Sum (NumRequest) returns (NumReply);
+  // Si se invoca ObtenerListaUsuarios con parámetro tipo UsuRequest
+  // Se devuelve una lista del tipo UsuListReply
+  rpc ObtenerListaUsuarios (UsuRequest) returns (UsuListReply);
+}
+
+// Declaramos el tipo HelloRequest
+message HelloRequest {
+  string name = 1; // Sólo tiene un nombre string
+}
+
+// Declaramos el tipo HelloReply
+message HelloReply {
+  string message = 1; // Sólo tiene un mensaje string
+}
+
+// Declaramos el tipo NumRequest
+message NumRequest {
+  // tiene dos números
+	int32 a = 1;
+	int32 b = 2;
+}
+
+// Declaramos el tipo NumReply
+message NumReply {
+  	int32 result = 1;  // Sólo tiene un número
+}
+
+message UsuRequest {} // UsusRequest es un mensaje sin contenido, pero con tipo
+
+message UsuListReply {
+ 	repeated Usuario usuarios = 1; // UsuListReply es una secuencia de usuarios 
+}
+
+message Usuario {
+  // Usuario tiene estos atributos
+	string nombre = 1;
+	string apellido = 2;
+	int32 edad = 3;
+}
+

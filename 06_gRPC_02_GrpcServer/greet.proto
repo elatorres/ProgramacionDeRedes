@@ -1,0 +1,60 @@
+syntax = "proto3";
+// https://protobuf.dev/programming-guides/proto3/
+// Pueden cambiar el namespace para el cliente y para el servidor o pueden usar el mismo
+// En el segundo caso les va a pedir delcarar el "using", ciudado que no les genere 
+// dependencia de código entre cliente y servidor
+option csharp_namespace = "GrpcServer";
+
+package greet;
+
+// The greeting service definition.
+service Greeter {
+  // Sends a greeting
+  rpc SayHello (HelloRequest) returns (HelloReply);
+  // Suma de dos numeros 
+  rpc AddNumbers (NumbersRequest) returns (NumbersReturn); 
+ // Pedir Lista de usuarios 
+  rpc GetUserList (UserListRequest) returns (UserListReply);
+}
+
+// The request message containing the user's name.
+message HelloRequest {
+  string name = 1;
+}
+
+// The response message containing the greetings.
+message HelloReply {
+  string message = 1;
+}
+
+// Puedo tener varios campos en un mensaje: 
+message NumbersRequest{
+	int32 numeroA = 1;
+	int32 numeroB = 2;
+}
+
+message NumbersReturn{
+	int32 suma = 1;
+}
+
+// Puede enviar mensajes sin contido:
+message UserListRequest
+{
+
+}
+
+// repeated indica que ese campo es una lista 
+message UserListReply
+{
+repeated User users = 1;
+}
+
+// En la documenatci�n pueden ver todos los tipos de campos que hay 
+// https://protobuf.dev/programming-guides/proto3/
+message User{
+	string name = 1;
+	int32 age = 2;
+	bool isMale = 3;
+}
+
+
