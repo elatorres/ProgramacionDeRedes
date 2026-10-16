@@ -232,6 +232,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "06_gRPC_05_GrpcTslAuthentic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "06_gRPC_05_GrpcTslAuthenticationServer", "06_gRPC_05_GrpcTslAuthenticationServer\06_gRPC_05_GrpcTslAuthenticationServer.csproj", "{B538300A-FEFD-4035-92A5-8C22DFCCD1FD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "06_gRPC_05_GrpcExceptionClient", "06_gRPC_05_GrpcExceptionClient\06_gRPC_05_GrpcExceptionClient.csproj", "{52A91AE9-8EA1-44F3-B5B9-FA79AFCEFD34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "06_gRPC_05_GrpcExceptionServer", "06_gRPC_05_GrpcExceptionServer\06_gRPC_05_GrpcExceptionServer.csproj", "{35908EAE-F3BF-42DB-ACAA-160593384D13}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -702,5 +706,13 @@ Global
 		{B538300A-FEFD-4035-92A5-8C22DFCCD1FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B538300A-FEFD-4035-92A5-8C22DFCCD1FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B538300A-FEFD-4035-92A5-8C22DFCCD1FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52A91AE9-8EA1-44F3-B5B9-FA79AFCEFD34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52A91AE9-8EA1-44F3-B5B9-FA79AFCEFD34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52A91AE9-8EA1-44F3-B5B9-FA79AFCEFD34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52A91AE9-8EA1-44F3-B5B9-FA79AFCEFD34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35908EAE-F3BF-42DB-ACAA-160593384D13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35908EAE-F3BF-42DB-ACAA-160593384D13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35908EAE-F3BF-42DB-ACAA-160593384D13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35908EAE-F3BF-42DB-ACAA-160593384D13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

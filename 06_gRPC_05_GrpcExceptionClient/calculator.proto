@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcDivisionExample";
+
+package calculator;
+
+service CalculatorService {
+  rpc Divide (DivideRequest) returns (DivideReply);
+}
+
+message DivideRequest {
+  double numerator = 1;
+  double denominator = 2;
+}
+
+message DivideReply {
+  double result = 1;
+}
