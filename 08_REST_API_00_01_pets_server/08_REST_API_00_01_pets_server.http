@@ -1,0 +1,6 @@
+@_08_REST_API_00_01_pets_server_HostAddress = http://localhost:5111
+
+#GET {{_08_REST_API_00_01_pets_server_HostAddress}}/weatherforecast/
+#Accept: application/json
+
+###

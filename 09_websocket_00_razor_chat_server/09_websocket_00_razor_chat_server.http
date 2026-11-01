@@ -1,0 +1,6 @@
+@_09_websocket_00_razor_chat_server_HostAddress = http://localhost:5095
+
+GET {{_09_websocket_00_razor_chat_server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

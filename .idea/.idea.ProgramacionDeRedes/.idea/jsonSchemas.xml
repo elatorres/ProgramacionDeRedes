@@ -17,6 +17,18 @@
                   <Item>
                     <option name="path" value="06_gRPC_03_GrpcStreamingServer/appsettings.Development.json" />
                   </Item>
+                  <Item>
+                    <option name="path" value="08_REST_API_00_00_weather_forecast/appsettings.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="08_REST_API_00_00_weather_forecast/appsettings.Development.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="08_REST_API_00_01_pets_server/appsettings.Development.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="08_REST_API_00_01_pets_server/appsettings.json" />
+                  </Item>
                 </list>
               </option>
             </SchemaInfo>
