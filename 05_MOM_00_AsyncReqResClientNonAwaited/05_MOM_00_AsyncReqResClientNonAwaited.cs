@@ -4,6 +4,7 @@ using System.Collections.Concurrent;
 using System.Text;
 
 // RPC
+// Basado en el ejemplo de https://www.rabbitmq.com/tutorials/tutorial-six-dotnet
 // 
 // La clase RpcClient implementa un canal bidireccional con el servidor donde se le pide una
 // operación y se espera el retorno del resultado. Maneja las múltiples solicitudes y es

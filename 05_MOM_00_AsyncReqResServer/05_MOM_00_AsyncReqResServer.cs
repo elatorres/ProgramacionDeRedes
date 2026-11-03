@@ -3,6 +3,7 @@ using RabbitMQ.Client.Events;
 using System.Text;
 
 // Implementa un RPC Remote Procedure Call con RabbitMQ
+// Basado en el ejemplo de https://www.rabbitmq.com/tutorials/tutorial-six-dotnet
 const string queueName = "rpc_queue";
 // Creo el connection factory y especifico el EndPoint y el usuario (puerto por defecto)
 var factory = new ConnectionFactory { HostName = "localhost" ,

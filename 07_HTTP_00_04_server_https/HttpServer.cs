@@ -314,4 +314,5 @@ public sealed class HttpServer
         var sb = new StringBuilder();
         sb.Append("<!doctype html><html><head><meta charset='utf-8'><title>Admin</title></head><body>");
         sb.Append("<h1>User management</h1>");
-        sb.Append("<p><a href='/logout'>Log out</a> &mdash; <a href='/index.html'>Home</a></p
+        sb.Append("<p><a href='/logout'>Log out</a> &mdash; <a href='/index.html'>Home</a></p>");
+        sb.Append("</body></html>");

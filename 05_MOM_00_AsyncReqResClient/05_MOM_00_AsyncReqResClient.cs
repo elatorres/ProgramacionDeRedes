@@ -8,6 +8,7 @@ using System.Text;
 // PIDE EL FIBONACCI
 // cd /home/enrique/RiderProjects/ProgramacionDeRedes/05_MOM_00_AsyncReqResClient/bin/Debug/net8.0/
 // ./05_MOM_00_AsyncReqResClient 10
+// Basado en el ejemplo de https://www.rabbitmq.com/tutorials/tutorial-six-dotnet
 // 
 // El método IAsyncDisposable.DisposeAsync() de la interfaz System.IAsyncDisposable
 // se implementa cuando se necesita realizar un Dispose asincrónico. DisposeAsync()
